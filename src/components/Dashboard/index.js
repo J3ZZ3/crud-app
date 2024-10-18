@@ -20,7 +20,6 @@ const Dashboard = ({ setIsAuthenticated }) => {
     const employees = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
     setEmployees(employees);
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
     });
     setEmployees(employees);
@@ -86,6 +85,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
           employees={employees}
           setEmployees={setEmployees}
           setIsAdding={setIsAdding}
+          getEmployees={getEmployees}
         />
       )}
       {isEditing && (
