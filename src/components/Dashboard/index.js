@@ -6,7 +6,7 @@ import Table from "./Table";
 import Add from "./Add";
 import Edit from "./Edit";
 
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../config/firestore";
 
 const Dashboard = ({ setIsAuthenticated }) => {
@@ -17,7 +17,10 @@ const Dashboard = ({ setIsAuthenticated }) => {
 
   const getEmployees = async () => {
     const querySnapshot = await getDocs(collection(db, "employees"));
-    const employees = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+    const employees = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     setEmployees(employees);
     querySnapshot.forEach((doc) => {
       console.log(doc.id, " => ", doc.data());
@@ -47,8 +50,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
       if (result.value) {
         const [employee] = employees.filter((employee) => employee.id === id);
 
-        // TODO delete document
-
+        deleteDoc(doc(db, "employees", id));
         Swal.fire({
           icon: "success",
           title: "Deleted!",
